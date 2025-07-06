@@ -13,8 +13,10 @@ interface VideoPageProps {
 
 async function getVideo(id: string): Promise<Video | null> {
   try {
-    // TODO: Replace with actual API call
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/videos/${id}`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
+    console.log('API URL:', apiUrl, 'Environment:', process.env.NODE_ENV);
+    
+    const response = await fetch(`${apiUrl}/api/v1/videos/${id}`, {
       cache: 'no-store'
     });
     
@@ -32,8 +34,8 @@ async function getVideo(id: string): Promise<Video | null> {
 
 async function getRelatedVideos(videoId: string): Promise<Video[]> {
   try {
-    // TODO: Replace with actual API call
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/videos/${videoId}/related`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
+    const response = await fetch(`${apiUrl}/api/v1/videos/${videoId}/related`, {
       cache: 'no-store'
     });
     

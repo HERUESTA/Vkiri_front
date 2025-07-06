@@ -14,7 +14,7 @@ interface VideoPageProps {
 async function getVideo(id: string): Promise<Video | null> {
   try {
     // TODO: Replace with actual API call
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/videos/${id}`, {
       cache: 'no-store'
     });
     
@@ -33,7 +33,7 @@ async function getVideo(id: string): Promise<Video | null> {
 async function getRelatedVideos(videoId: string): Promise<Video[]> {
   try {
     // TODO: Replace with actual API call
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos/${videoId}/related`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/videos/${videoId}/related`, {
       cache: 'no-store'
     });
     

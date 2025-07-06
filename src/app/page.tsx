@@ -3,8 +3,14 @@ import VideoGrid from '@/components/VideoGrid';
 
 async function getVideos(): Promise<Video[]> {
   try {
-    // TODO: Replace with actual API call
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos`, {
+    // 環境に応じてAPIのURLを決定
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
+                   (process.env.NODE_ENV === 'production' 
+                     ? 'https://vkiri-back.fly.dev' 
+                     : 'http://172.20.0.4:3000');
+    
+    // バックエンドAPIからビデオデータを取得
+    const response = await fetch(`${apiUrl}/api/v1/videos`, {
       cache: 'no-store'
     });
     

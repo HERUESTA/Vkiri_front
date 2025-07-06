@@ -6,9 +6,9 @@ import CommentSection from '@/components/CommentSection';
 import RelatedVideos from '@/components/RelatedVideos';
 
 interface VideoPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getVideo(id: string): Promise<Video | null> {
@@ -50,13 +50,14 @@ async function getRelatedVideos(videoId: string): Promise<Video[]> {
 }
 
 export default async function VideoPage({ params }: VideoPageProps) {
-  const video = await getVideo(params.id);
+  const { id } = await params;
+  const video = await getVideo(id);
   
   if (!video) {
     notFound();
   }
   
-  const relatedVideos = await getRelatedVideos(params.id);
+  const relatedVideos = await getRelatedVideos(id);
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -85,7 +86,8 @@ export default async function VideoPage({ params }: VideoPageProps) {
 }
 
 export async function generateMetadata({ params }: VideoPageProps) {
-  const video = await getVideo(params.id);
+  const { id } = await params;
+  const video = await getVideo(id);
   
   if (!video) {
     return {

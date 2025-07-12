@@ -63,14 +63,27 @@ export default async function VideoPage({ params }: VideoPageProps) {
   const relatedVideos = await getRelatedVideos(id);
   
   return (
-    <Box minH="100vh" bg="gray.50" _dark={{ bg: "gray.900" }}>
+    <Box 
+      minH="100vh" 
+      bgGradient="linear(to-br, purple.50, pink.50, blue.50)" 
+      _dark={{ bgGradient: "linear(to-br, purple.900, pink.900, blue.900)" }}
+    >
       <Container maxW="7xl" px={4} py={6}>
-        <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={6}>
+        <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={8}>
           {/* Main content */}
           <GridItem>
-            <VStack spacing={6} align="stretch">
+            <VStack spacing={8} align="stretch">
               {/* Video player */}
-              <VideoPlayer video={video} />
+              <Box
+                borderRadius="2xl"
+                overflow="hidden"
+                shadow="2xl"
+                border="3px solid"
+                borderColor="purple.200"
+                _dark={{ borderColor: "purple.600" }}
+              >
+                <VideoPlayer video={video} />
+              </Box>
               
               {/* Video info */}
               <VideoInfo video={video} />
@@ -82,7 +95,9 @@ export default async function VideoPage({ params }: VideoPageProps) {
           
           {/* Sidebar */}
           <GridItem>
-            <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
+            <Box position="sticky" top={6}>
+              <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
+            </Box>
           </GridItem>
         </Grid>
       </Container>

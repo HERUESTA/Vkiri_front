@@ -26,38 +26,63 @@ export default function RelatedVideos({ videos, currentVideoId }: RelatedVideosP
     <Box
       bg="white"
       _dark={{ bg: "gray.800" }}
-      borderRadius="lg"
+      borderRadius="2xl"
       p={6}
-      shadow="sm"
+      shadow="xl"
+      border="2px solid"
+      borderColor="blue.100"
+      _dark={{ borderColor: "blue.700" }}
+      position="relative"
+      _before={{
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "6px",
+        bgGradient: "linear(to-r, blue.400, purple.400, pink.400)",
+        borderTopRadius: "2xl"
+      }}
     >
       <Heading
         as="h2"
         size="lg"
-        color="gray.900"
-        _dark={{ color: "white" }}
+        bgGradient="linear(to-r, blue.500, purple.500)"
+        bgClip="text"
+        fontWeight="extrabold"
         mb={4}
       >
-        Related Videos
+        🎬 Related Videos
       </Heading>
       
       <VStack align="stretch" spacing={4}>
         {filteredVideos.length === 0 ? (
           <Center py={8}>
             <Text
-              color="gray.500"
-              _dark={{ color: "gray.400" }}
+              color="blue.500"
+              _dark={{ color: "blue.400" }}
+              fontSize="lg"
+              fontWeight="medium"
             >
-              No related videos found
+              😊 No related videos found
             </Text>
           </Center>
         ) : (
           filteredVideos.map((video) => (
             <LinkBox key={video.id} role="group">
               <Box
-                _hover={{ bg: "gray.50", _dark: { bg: "gray.700" } }}
-                borderRadius="lg"
-                p={2}
-                transition="background-color 0.2s"
+                _hover={{ 
+                  bg: "blue.50", 
+                  _dark: { bg: "blue.900" },
+                  transform: "translateX(4px)",
+                  shadow: "md"
+                }}
+                borderRadius="xl"
+                p={3}
+                transition="all 0.2s"
+                border="1px solid"
+                borderColor="blue.100"
+                _dark={{ borderColor: "blue.700" }}
               >
                 <HStack spacing={3} align="start">
                   <Box
@@ -98,33 +123,36 @@ export default function RelatedVideos({ videos, currentVideoId }: RelatedVideosP
                       <Heading
                         as="h3"
                         size="sm"
-                        color="gray.900"
+                        color="gray.800"
                         _dark={{ color: "white" }}
                         noOfLines={2}
-                        _groupHover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                        _groupHover={{ color: "blue.600", _dark: { color: "blue.300" } }}
                         transition="color 0.2s"
+                        fontWeight="bold"
                       >
-                        {video.title}
+                        🎥 {video.title}
                       </Heading>
                     </LinkOverlay>
                     <Text
                       fontSize="sm"
-                      color="gray.600"
-                      _dark={{ color: "gray.400" }}
+                      color="blue.600"
+                      _dark={{ color: "blue.400" }}
                       mt={1}
+                      fontWeight="medium"
                     >
-                      {video.uploader_name}
+                      🎭 {video.uploader_name}
                     </Text>
                     <HStack
                       fontSize="xs"
-                      color="gray.500"
-                      _dark={{ color: "gray.400" }}
+                      color="purple.500"
+                      _dark={{ color: "purple.400" }}
                       spacing={2}
                       mt={1}
+                      fontWeight="medium"
                     >
-                      <Text>{video.view_count_formatted} views</Text>
-                      <Text>•</Text>
-                      <Text>{video.published_at_formatted}</Text>
+                      <Text>👀 {video.view_count_formatted}</Text>
+                      <Text>✨</Text>
+                      <Text>📅 {video.published_at_formatted}</Text>
                     </HStack>
                     
                     {video.livers.length > 0 && (

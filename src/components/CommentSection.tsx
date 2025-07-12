@@ -70,18 +70,33 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
     <Box
       bg="white"
       _dark={{ bg: "gray.800" }}
-      borderRadius="lg"
+      borderRadius="2xl"
       p={6}
-      shadow="sm"
+      shadow="xl"
+      border="2px solid"
+      borderColor="pink.100"
+      _dark={{ borderColor: "pink.700" }}
+      position="relative"
+      _before={{
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "6px",
+        bgGradient: "linear(to-r, pink.400, purple.400, blue.400)",
+        borderTopRadius: "2xl"
+      }}
     >
       <Heading
         as="h2"
         size="lg"
-        color="gray.900"
-        _dark={{ color: "white" }}
+        bgGradient="linear(to-r, pink.500, purple.500)"
+        bgClip="text"
+        fontWeight="extrabold"
         mb={6}
       >
-        Comments ({comments.length})
+        💬 Comments ({comments.length})
       </Heading>
       
       {/* Comment form */}
@@ -100,14 +115,20 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
               <Textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment..."
+                placeholder="✨ Add a comment..."
                 resize="none"
                 rows={3}
                 isDisabled={isLoading}
-                focusBorderColor="blue.500"
-                bg="white"
+                focusBorderColor="pink.400"
+                bg="pink.50"
                 _dark={{ bg: "gray.700", color: "white" }}
-                borderColor="gray.300"
+                borderColor="pink.200"
+                _dark={{ borderColor: "pink.600" }}
+                borderRadius="xl"
+                _focus={{
+                  borderColor: "pink.400",
+                  shadow: "0 0 0 1px var(--chakra-colors-pink-400)"
+                }}
               />
             </FormControl>
             <HStack justify="end" spacing={2}>
@@ -115,20 +136,30 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 variant="ghost"
                 onClick={() => setNewComment('')}
                 isDisabled={isLoading}
-                color="gray.600"
-                _dark={{ color: "gray.400" }}
-                _hover={{ color: "gray.800", _dark: { color: "gray.200" } }}
+                color="pink.500"
+                _dark={{ color: "pink.400" }}
+                _hover={{ color: "pink.600", _dark: { color: "pink.300" } }}
+                borderRadius="xl"
               >
-                Cancel
+                ❌ Cancel
               </Button>
               <Button
                 type="submit"
-                colorScheme="blue"
+                bgGradient="linear(to-r, pink.400, purple.400)"
+                color="white"
+                _hover={{
+                  bgGradient: "linear(to-r, pink.500, purple.500)",
+                  transform: "translateY(-1px)",
+                  shadow: "md"
+                }}
                 isDisabled={!newComment.trim() || isLoading}
                 isLoading={isLoading}
                 loadingText="Posting..."
+                borderRadius="xl"
+                fontWeight="bold"
+                transition="all 0.2s"
               >
-                Comment
+                💬 Comment
               </Button>
             </HStack>
           </VStack>
@@ -140,10 +171,12 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
         {comments.length === 0 ? (
           <Center py={8}>
             <Text
-              color="gray.500"
-              _dark={{ color: "gray.400" }}
+              color="pink.500"
+              _dark={{ color: "pink.400" }}
+              fontSize="lg"
+              fontWeight="medium"
             >
-              No comments yet. Be the first to comment!
+              😊 No comments yet. Be the first to comment!
             </Text>
           </Center>
         ) : (
@@ -160,24 +193,31 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
               <VStack align="stretch" flex={1} spacing={1}>
                 <HStack spacing={2} mb={1}>
                   <Text
-                    fontWeight="semibold"
-                    color="gray.900"
-                    _dark={{ color: "white" }}
+                    fontWeight="bold"
+                    color="purple.600"
+                    _dark={{ color: "purple.300" }}
                   >
-                    {comment.author}
+                    👤 {comment.author}
                   </Text>
                   <Text
                     fontSize="sm"
-                    color="gray.500"
-                    _dark={{ color: "gray.400" }}
+                    color="pink.500"
+                    _dark={{ color: "pink.400" }}
                   >
-                    {comment.timestamp}
+                    🕰️ {comment.timestamp}
                   </Text>
                 </HStack>
                 <Text
-                  color="gray.800"
+                  color="gray.700"
                   _dark={{ color: "gray.200" }}
                   mb={2}
+                  bg="purple.50"
+                  _dark={{ bg: "purple.900" }}
+                  p={3}
+                  borderRadius="lg"
+                  border="1px solid"
+                  borderColor="purple.100"
+                  _dark={{ borderColor: "purple.700" }}
                 >
                   {comment.content}
                 </Text>

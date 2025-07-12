@@ -22,18 +22,34 @@ export default function VideoInfo({ video }: VideoInfoProps) {
     <Box
       bg="white"
       _dark={{ bg: "gray.800" }}
-      borderRadius="lg"
+      borderRadius="2xl"
       p={6}
-      shadow="sm"
+      shadow="xl"
+      border="2px solid"
+      borderColor="purple.100"
+      _dark={{ borderColor: "purple.700" }}
+      position="relative"
+      _before={{
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "6px",
+        bgGradient: "linear(to-r, purple.400, pink.400, blue.400)",
+        borderTopRadius: "2xl"
+      }}
     >
       <Heading
         as="h1"
         size="xl"
-        color="gray.900"
-        _dark={{ color: "white" }}
+        bgGradient="linear(to-r, purple.600, pink.600)"
+        bgClip="text"
+        fontWeight="extrabold"
         mb={4}
+        lineHeight="1.2"
       >
-        {video.title}
+        ✨ {video.title}
       </Heading>
       
       <Flex
@@ -54,13 +70,14 @@ export default function VideoInfo({ video }: VideoInfoProps) {
           <Box>
             <Link href={`/channel/${video.uploader_channel_id}`}>
               <Text
-                fontWeight="semibold"
-                color="gray.900"
-                _dark={{ color: "white" }}
-                _hover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                fontWeight="bold"
+                color="purple.600"
+                _dark={{ color: "purple.300" }}
+                _hover={{ color: "pink.500", _dark: { color: "pink.400" } }}
                 transition="color 0.2s"
+                fontSize="lg"
               >
-                {video.uploader_name}
+                🎭 {video.uploader_name}
               </Text>
             </Link>
           </Box>
@@ -69,12 +86,13 @@ export default function VideoInfo({ video }: VideoInfoProps) {
         <HStack
           spacing={4}
           fontSize="sm"
-          color="gray.600"
-          _dark={{ color: "gray.400" }}
+          color="purple.500"
+          _dark={{ color: "purple.400" }}
+          fontWeight="medium"
         >
-          <Text>{video.view_count_formatted} views</Text>
-          <Text>{video.published_at_formatted}</Text>
-          <Text>{video.duration_formatted}</Text>
+          <Text>👀 {video.view_count_formatted} views</Text>
+          <Text>📅 {video.published_at_formatted}</Text>
+          <Text>⏱️ {video.duration_formatted}</Text>
         </HStack>
       </Flex>
       
@@ -82,12 +100,13 @@ export default function VideoInfo({ video }: VideoInfoProps) {
         <Box mb={4}>
           <Heading
             as="h3"
-            size="sm"
-            color="gray.700"
-            _dark={{ color: "gray.300" }}
+            size="md"
+            bgGradient="linear(to-r, purple.500, pink.500)"
+            bgClip="text"
+            fontWeight="bold"
             mb={2}
           >
-            Featured Livers
+            🌟 Featured Livers
           </Heading>
           <HStack wrap="wrap" spacing={2}>
             {video.livers.map((liver) => (
@@ -130,7 +149,17 @@ export default function VideoInfo({ video }: VideoInfoProps) {
           href={video.youtube_url}
           target="_blank"
           rel="noopener noreferrer"
-          colorScheme="red"
+          bgGradient="linear(to-r, red.400, pink.400)"
+          color="white"
+          _hover={{
+            bgGradient: "linear(to-r, red.500, pink.500)",
+            transform: "translateY(-2px)",
+            shadow: "lg"
+          }}
+          transition="all 0.2s"
+          size="lg"
+          borderRadius="xl"
+          fontWeight="bold"
           leftIcon={
             <Icon viewBox="0 0 24 24" boxSize={5}>
               <path
@@ -140,7 +169,7 @@ export default function VideoInfo({ video }: VideoInfoProps) {
             </Icon>
           }
         >
-          Watch on YouTube
+          🎬 Watch on YouTube
         </Button>
       </HStack>
     </Box>

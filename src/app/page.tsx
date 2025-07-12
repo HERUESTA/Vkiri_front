@@ -31,28 +31,79 @@ export default async function Home() {
   const videos = await getVideos();
   
   return (
-    <Box minH="100vh" bg="gray.50" _dark={{ bg: "gray.900" }}>
+    <Box 
+      minH="100vh" 
+      bgGradient="linear(to-br, purple.50, pink.50, blue.50)" 
+      _dark={{ bgGradient: "linear(to-br, purple.900, pink.900, blue.900)" }}
+    >
       <Container maxW="7xl" px={4} py={8}>
-        <Box as="header" mb={8}>
-          <Heading as="h1" size="2xl" color="gray.900" _dark={{ color: "white" }} mb={2}>
-            VTube
-          </Heading>
-          <Text color="gray.600" _dark={{ color: "gray.400" }}>
-            VTuber動画を見つけて楽しもう
-          </Text>
+        <Box as="header" mb={8} textAlign="center">
+          <VStack spacing={4}>
+            <Heading 
+              as="h1" 
+              size="3xl" 
+              bgGradient="linear(to-r, purple.400, pink.400, blue.400)" 
+              bgClip="text"
+              fontWeight="extrabold"
+              mb={2}
+              textShadow="2px 2px 4px rgba(0,0,0,0.1)"
+            >
+              ✨ VTube ✨
+            </Heading>
+            <Text 
+              fontSize="xl" 
+              color="purple.600" 
+              _dark={{ color: "purple.300" }}
+              fontWeight="medium"
+            >
+              🌟 VTuber動画を見つけて楽しもう！ 🌟
+            </Text>
+            <Box
+              w="100px"
+              h="4px"
+              bgGradient="linear(to-r, purple.400, pink.400, blue.400)"
+              borderRadius="full"
+              mx="auto"
+            />
+          </VStack>
         </Box>
         
         <Box as="main">
           {videos.length === 0 ? (
             <Center py={12}>
-              <VStack spacing={4}>
-                <Text fontSize="6xl" mb={4}>🎬</Text>
-                <Heading as="h2" size="xl" color="gray.900" _dark={{ color: "white" }} mb={2}>
-                  動画が見つかりません
-                </Heading>
-                <Text color="gray.600" _dark={{ color: "gray.400" }}>
-                  APIが設定されていないか、動画がまだ登録されていません。
-                </Text>
+              <VStack spacing={6}>
+                <Box
+                  bg="white"
+                  _dark={{ bg: "gray.800" }}
+                  p={8}
+                  borderRadius="3xl"
+                  shadow="2xl"
+                  border="3px solid"
+                  borderColor="purple.200"
+                  _dark={{ borderColor: "purple.600" }}
+                >
+                  <VStack spacing={4}>
+                    <Text fontSize="8xl" mb={4}>🎬✨</Text>
+                    <Heading 
+                      as="h2" 
+                      size="xl" 
+                      color="purple.600" 
+                      _dark={{ color: "purple.300" }} 
+                      mb={2}
+                      textAlign="center"
+                    >
+                      まだ動画がないよ〜！
+                    </Heading>
+                    <Text 
+                      color="purple.500" 
+                      _dark={{ color: "purple.400" }}
+                      textAlign="center"
+                      fontSize="lg"
+                    >
+                      素敵なVTuber動画をお待ちください💫
+                    </Text>
+                  </VStack>
+                </Box>
               </VStack>
             </Center>
           ) : (

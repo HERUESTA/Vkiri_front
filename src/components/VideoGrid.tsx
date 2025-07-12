@@ -26,11 +26,33 @@ export default function VideoGrid({ videos }: VideoGridProps) {
           <Box
             bg="white"
             _dark={{ bg: "gray.800" }}
-            borderRadius="lg"
+            borderRadius="2xl"
             overflow="hidden"
-            shadow="sm"
-            _hover={{ shadow: "md" }}
-            transition="box-shadow 0.2s"
+            shadow="lg"
+            _hover={{ 
+              shadow: "2xl", 
+              transform: "translateY(-4px)",
+              borderColor: "purple.300"
+            }}
+            transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+            border="2px solid"
+            borderColor="purple.100"
+            _dark={{ borderColor: "purple.700" }}
+            position="relative"
+            _before={{
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              bgGradient: "linear(to-r, purple.400, pink.400, blue.400)",
+              opacity: 0,
+              transition: "opacity 0.3s"
+            }}
+            _groupHover={{
+              _before: { opacity: 1 }
+            }}
           >
             <AspectRatio ratio={16/9}>
               <Box position="relative" bg="gray.200" _dark={{ bg: "gray.600" }}>
@@ -64,11 +86,15 @@ export default function VideoGrid({ videos }: VideoGridProps) {
                 <Heading
                   as="h3"
                   size="sm"
-                  color="gray.900"
+                  color="gray.800"
                   _dark={{ color: "white" }}
                   noOfLines={2}
-                  _groupHover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                  _groupHover={{ 
+                    color: "purple.600", 
+                    _dark: { color: "purple.300" } 
+                  }}
                   transition="color 0.2s"
+                  fontWeight="bold"
                 >
                   {video.title}
                 </Heading>
@@ -76,32 +102,36 @@ export default function VideoGrid({ videos }: VideoGridProps) {
               
               <Text
                 fontSize="sm"
-                color="gray.600"
-                _dark={{ color: "gray.400" }}
+                color="purple.600"
+                _dark={{ color: "purple.400" }}
+                fontWeight="medium"
               >
-                {video.uploader_name}
+                ✨ {video.uploader_name}
               </Text>
               
               <HStack
                 fontSize="xs"
-                color="gray.500"
-                _dark={{ color: "gray.400" }}
+                color="pink.500"
+                _dark={{ color: "pink.400" }}
                 spacing={2}
                 mb={3}
+                fontWeight="medium"
               >
-                <Text>{video.view_count_formatted} views</Text>
-                <Text>•</Text>
-                <Text>{video.published_at_formatted}</Text>
+                <Text>👀 {video.view_count_formatted}</Text>
+                <Text>💫</Text>
+                <Text>📅 {video.published_at_formatted}</Text>
               </HStack>
               
               {video.livers.length > 0 && (
                 <HStack wrap="wrap" spacing={1}>
-                  {video.livers.slice(0, 3).map((liver) => (
+                  {video.livers.slice(0, 3).map((liver, index) => (
                     <Tag
                       key={liver.id}
                       size="sm"
-                      colorScheme="blue"
+                      colorScheme={index % 3 === 0 ? "purple" : index % 3 === 1 ? "pink" : "blue"}
                       borderRadius="full"
+                      variant="subtle"
+                      fontWeight="bold"
                     >
                       <Box mr={1}>
                         <Image

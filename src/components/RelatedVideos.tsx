@@ -31,7 +31,6 @@ export default function RelatedVideos({ videos, currentVideoId }: RelatedVideosP
       shadow="xl"
       border="2px solid"
       borderColor="blue.100"
-      _dark={{ borderColor: "blue.700" }}
       position="relative"
       _before={{
         content: '""',

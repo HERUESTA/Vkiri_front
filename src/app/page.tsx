@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Video, VideosResponse } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
 import AnimatedBackground from '@/components/AnimatedBackground';
@@ -9,23 +9,21 @@ import VideoSlideshow from '@/components/VideoSlideshow';
 import Pagination from '@/components/Pagination';
 import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
-// 動的レンダリングを強制（useSearchParamsを使用するため）
-export const dynamic = 'force-dynamic';
-
 async function getVideos(page: number = 1, perPage: number = 20): Promise<VideosResponse> {
   try {
-    // 環境に応じてAPIのURLを決定
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
-                   (process.env.NODE_ENV === 'production' 
-                     ? 'https://vkiri-back.fly.dev' 
-                     : 'http://172.20.0.4:3000');
+    // 本番バックエンドを使用
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
     
     // バックエンドAPIからビデオデータを取得（ページネーション対応）
+    console.log('Fetching from URL:', `${apiUrl}/api/v1/videos?page=${page}&per_page=${perPage}`);
     const response = await fetch(`${apiUrl}/api/v1/videos?page=${page}&per_page=${perPage}`, {
       cache: 'no-store'
     });
     
+    console.log('Response status:', response.status, response.statusText);
+    
     if (!response.ok) {
+      console.error('API request failed:', response.status, response.statusText);
       return {
         videos: [],
         pagination: {
@@ -38,6 +36,7 @@ async function getVideos(page: number = 1, perPage: number = 20): Promise<Videos
     }
     
     const data = await response.json();
+    console.log('API data received:', { videosCount: data.videos?.length, pagination: data.pagination });
     return {
       videos: data.videos || [],
       pagination: data.pagination || {
@@ -61,8 +60,7 @@ async function getVideos(page: number = 1, perPage: number = 20): Promise<Videos
   }
 }
 
-function HomeContent() {
-  const searchParams = useSearchParams();
+export default function Home() {
   const router = useRouter();
   
   const [videos, setVideos] = useState<Video[]>([]);
@@ -74,15 +72,16 @@ function HomeContent() {
     per_page: 20
   });
   const [isLoading, setIsLoading] = useState(true);
-  
-  // URLからページ番号を取得
-  const currentPage = parseInt(searchParams.get('page') || '1');
+  const [currentPage, setCurrentPage] = useState(0); // 0で初期化して、未初期化状態を表現
+  const [initialized, setInitialized] = useState(false);
   
   // データ取得関数
   const fetchData = async (page: number) => {
+    console.log('fetchData called with page:', page);
     setIsLoading(true);
     try {
       const response = await getVideos(page, 20);
+      console.log('API response:', response);
       setVideos(response.videos);
       setPagination(response.pagination);
       
@@ -94,6 +93,7 @@ function HomeContent() {
         const latestResponse = await getVideos(1, 4);
         setSlideshowVideos(latestResponse.videos);
       }
+      console.log('Data loaded successfully, videos count:', response.videos.length);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -103,15 +103,29 @@ function HomeContent() {
   
   // ページ変更ハンドラー
   const handlePageChange = (page: number) => {
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set('page', page.toString());
-    router.push(`/?${newSearchParams.toString()}`);
+    setCurrentPage(page);
+    router.push(`/?page=${page}`, { scroll: false });
   };
   
-  // 初期データ取得とページ変更時の処理
+  // 初期化とURL解析
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+    console.log('Initial useEffect called');
+    if (typeof window !== 'undefined' && !initialized) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageFromUrl = parseInt(urlParams.get('page') || '1');
+      console.log('Page from URL:', pageFromUrl);
+      setCurrentPage(pageFromUrl);
+      setInitialized(true);
+    }
+  }, [initialized]);
+
+  // データ取得とページ変更時の処理
+  useEffect(() => {
+    if (initialized && currentPage > 0) {
+      console.log('Data fetch useEffect called with currentPage:', currentPage);
+      fetchData(currentPage);
+    }
+  }, [currentPage, initialized]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ページトップへのスクロール
   useEffect(() => {
@@ -250,37 +264,5 @@ function HomeContent() {
       </Container>
     </Box>
     </>
-  );
-}
-
-export default function Home() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-        <VStack spacing={4}>
-          <Text fontSize="4xl">🎬</Text>
-          <Text fontSize="lg" color="purple.600">動画を読み込んでいます...</Text>
-        </VStack>
-      </Box>
-    );
-  }
-
-  return (
-    <Suspense fallback={
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-        <VStack spacing={4}>
-          <Text fontSize="4xl">🎬</Text>
-          <Text fontSize="lg" color="purple.600">動画を読み込んでいます...</Text>
-        </VStack>
-      </Box>
-    }>
-      <HomeContent />
-    </Suspense>
   );
 }

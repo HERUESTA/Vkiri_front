@@ -1,6 +1,7 @@
 import { Video } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import VideoSlideshow from '@/components/VideoSlideshow';
 import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
 async function getVideos(): Promise<Video[]> {
@@ -38,6 +39,11 @@ export default async function Home() {
         minH="100vh" 
         position="relative"
       >
+        {/* スライドショーセクション */}
+        {videos.length > 0 && (
+          <VideoSlideshow videos={videos.slice(0, 6)} />
+        )}
+
       <Container maxW="7xl" px={4} py={8}>
         <Box as="header" mb={8} textAlign="center">
           <VStack spacing={4}>
@@ -108,7 +114,31 @@ export default async function Home() {
               </VStack>
             </Center>
           ) : (
-            <VideoGrid videos={videos} />
+            <VStack spacing={8} align="stretch">
+              {/* All Videos セクションヘッダー */}
+              <Box textAlign="center">
+                <Heading 
+                  as="h2" 
+                  size="2xl" 
+                  bgGradient="linear(to-r, purple.500, pink.500)" 
+                  bgClip="text"
+                  fontWeight="extrabold"
+                  mb={2}
+                >
+                  🎥 All Videos
+                </Heading>
+                <Text 
+                  fontSize="lg" 
+                  color="purple.600" 
+                  _dark={{ color: "purple.400" }}
+                  fontWeight="medium"
+                >
+                  すべてのVTuber動画をチェック！
+                </Text>
+              </Box>
+              
+              <VideoGrid videos={videos} />
+            </VStack>
           )}
         </Box>
       </Container>

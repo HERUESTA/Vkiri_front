@@ -3,6 +3,7 @@ import { Video } from '@/lib/types';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoInfo from '@/components/VideoInfo';
 import RelatedVideos from '@/components/RelatedVideos';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import { Box, Container, Grid, GridItem, VStack, Button, Icon } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -63,11 +64,12 @@ export default async function VideoPage({ params }: VideoPageProps) {
   const relatedVideos = await getRelatedVideos(id);
   
   return (
-    <Box 
-      minH="100vh" 
-      bgGradient="linear(to-br, purple.50, pink.50, blue.50)" 
-      _dark={{ bgGradient: "linear(to-br, purple.900, pink.900, blue.900)" }}
-    >
+    <>
+      <AnimatedBackground />
+      <Box 
+        minH="100vh" 
+        position="relative"
+      >
       {/* TOP戻るボタン */}
       <Box position="fixed" top={4} left={4} zIndex={10}>
         <Button
@@ -134,6 +136,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
         </Grid>
       </Container>
     </Box>
+    </>
   );
 }
 

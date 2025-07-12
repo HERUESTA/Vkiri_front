@@ -1,5 +1,6 @@
 import { Video } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
 async function getVideos(): Promise<Video[]> {
@@ -31,11 +32,12 @@ export default async function Home() {
   const videos = await getVideos();
   
   return (
-    <Box 
-      minH="100vh" 
-      bgGradient="linear(to-br, purple.50, pink.50, blue.50)" 
-      _dark={{ bgGradient: "linear(to-br, purple.900, pink.900, blue.900)" }}
-    >
+    <>
+      <AnimatedBackground />
+      <Box 
+        minH="100vh" 
+        position="relative"
+      >
       <Container maxW="7xl" px={4} py={8}>
         <Box as="header" mb={8} textAlign="center">
           <VStack spacing={4}>
@@ -111,5 +113,6 @@ export default async function Home() {
         </Box>
       </Container>
     </Box>
+    </>
   );
 }

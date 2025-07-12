@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation';
 import { Video } from '@/lib/types';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoInfo from '@/components/VideoInfo';
-import CommentSection from '@/components/CommentSection';
 import RelatedVideos from '@/components/RelatedVideos';
-import { Box, Container, Grid, GridItem, VStack } from '@chakra-ui/react';
+import { Box, Container, Grid, GridItem, VStack, Button, Icon } from '@chakra-ui/react';
+import Link from 'next/link';
 
 interface VideoPageProps {
   params: Promise<{
@@ -68,6 +68,39 @@ export default async function VideoPage({ params }: VideoPageProps) {
       bgGradient="linear(to-br, purple.50, pink.50, blue.50)" 
       _dark={{ bgGradient: "linear(to-br, purple.900, pink.900, blue.900)" }}
     >
+      {/* TOP戻るボタン */}
+      <Box position="fixed" top={4} left={4} zIndex={10}>
+        <Button
+          as={Link}
+          href="/"
+          bgGradient="linear(to-r, purple.400, pink.400)"
+          color="white"
+          _hover={{
+            bgGradient: "linear(to-r, purple.500, pink.500)",
+            transform: "translateY(-2px)",
+            shadow: "lg"
+          }}
+          transition="all 0.2s"
+          borderRadius="xl"
+          fontWeight="bold"
+          size="md"
+          leftIcon={
+            <Icon viewBox="0 0 24 24" boxSize={5}>
+              <path
+                fill="currentColor"
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </Icon>
+          }
+          shadow="xl"
+          border="2px solid"
+          borderColor="white"
+          _dark={{ borderColor: "gray.700" }}
+        >
+          🏠 TOP
+        </Button>
+      </Box>
+      
       <Container maxW="7xl" px={4} py={6}>
         <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={8}>
           {/* Main content */}
@@ -88,8 +121,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
               {/* Video info */}
               <VideoInfo video={video} />
               
-              {/* Comments */}
-              <CommentSection videoId={video.id} />
+        
             </VStack>
           </GridItem>
           

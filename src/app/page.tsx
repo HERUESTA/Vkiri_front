@@ -80,7 +80,6 @@ export default async function Home() {
                   shadow="2xl"
                   border="3px solid"
                   borderColor="purple.200"
-                  _dark={{ borderColor: "purple.600" }}
                 >
                   <VStack spacing={4}>
                     <Text fontSize="8xl" mb={4}>🎬✨</Text>

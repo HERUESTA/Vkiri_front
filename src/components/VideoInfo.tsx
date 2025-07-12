@@ -27,7 +27,6 @@ export default function VideoInfo({ video }: VideoInfoProps) {
       shadow="xl"
       border="2px solid"
       borderColor="purple.100"
-      _dark={{ borderColor: "purple.700" }}
       position="relative"
       _before={{
         content: '""',

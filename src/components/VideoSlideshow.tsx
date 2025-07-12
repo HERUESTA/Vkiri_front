@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   Box,
-  Container,
   Heading,
   Text,
   HStack,
@@ -27,13 +26,10 @@ export default function VideoSlideshow({ videos }: VideoSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   
-  // レスポンシブ対応 - 1枚ずつ表示に変更
-  const slidesToShow = 1;
   const slideHeight = useBreakpointValue({ base: '400px', md: '450px', lg: '500px' }) || '500px';
 
   // 動画配列をループ用に複製
   const loopedVideos = videos.length > 0 ? [...videos, ...videos, ...videos] : [];
-  const totalVideos = loopedVideos.length;
 
   // 5秒ごとに自動スライド（無限ループ）
   useEffect(() => {

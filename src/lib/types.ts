@@ -56,6 +56,7 @@ export interface LiversResponse {
 
 export interface VideoResponse {
   video: Video;
+  related_videos?: Video[];
 }
 
 export interface LiverResponse {

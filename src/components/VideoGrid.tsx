@@ -1,76 +1,159 @@
-import { Video } from '@/lib/types';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { Video } from '@/lib/types';
+import {
+  Box,
+  Grid,
+  AspectRatio,
+  Image,
+  Text,
+  VStack,
+  HStack,
+  Badge,
+  useColorModeValue,
+  Skeleton,
+} from '@chakra-ui/react';
 
 interface VideoGridProps {
   videos: Video[];
+  isLoading?: boolean;
 }
 
-export default function VideoGrid({ videos }: VideoGridProps) {
+const VideoGrid: React.FC<VideoGridProps> = ({ videos, isLoading = false }) => {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const cardShadow = useColorModeValue('xl', 'dark-lg');
+  const textColor = useColorModeValue('gray.800', 'white');
+  const metaColor = useColorModeValue('gray.600', 'gray.400');
+
+  if (isLoading) {
+    return (
+      <Grid
+        templateColumns="repeat(auto-fill, minmax(320px, 1fr))"
+        gap={6}
+        w="100%"
+      >
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Box key={`skeleton-${i}`} bg={cardBg} borderRadius="xl" overflow="hidden" shadow={cardShadow}>
+            <AspectRatio ratio={16/9}>
+              <Skeleton w="100%" h="100%" />
+            </AspectRatio>
+            <Box p={4}>
+              <VStack align="start" spacing={3}>
+                <Skeleton height="20px" width="90%" />
+                <Skeleton height="16px" width="60%" />
+                <Skeleton height="14px" width="40%" />
+              </VStack>
+            </Box>
+          </Box>
+        ))}
+      </Grid>
+    );
+  }
+
+  if (!videos || videos.length === 0) {
+    return (
+      <Box 
+        textAlign="center" 
+        py={12}
+        color="gray.500"
+        _dark={{ color: "gray.400" }}
+      >
+        <Text fontSize="lg">動画が見つかりませんでした。</Text>
+      </Box>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <Grid
+      templateColumns="repeat(auto-fill, minmax(320px, 1fr))"
+      gap={6}
+      w="100%"
+    >
       {videos.map((video) => (
-        <Link
-          key={video.id}
-          href={`/video/${video.id}`}
-          className="block group"
-        >
-          <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative aspect-video bg-gray-200 dark:bg-gray-600">
-              <Image
-                src={video.thumbnail_url}
-                alt={video.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-200"
-              />
-              <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
-                {video.duration_formatted}
-              </div>
-            </div>
-            
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {video.title}
-              </h3>
+        <Link key={video.id} href={`/video/${video.id}`}>
+          <Box
+            bg={cardBg}
+            borderRadius="xl"
+            overflow="hidden"
+            shadow={cardShadow}
+            transition="all 0.3s ease"
+            _hover={{
+              transform: 'translateY(-4px)',
+              shadow: '2xl',
+            }}
+            cursor="pointer"
+          >
+            {/* サムネイル部分 - 完全に分離 */}
+            <Box position="relative">
+              <AspectRatio ratio={16/9}>
+                <Image
+                  src={video.thumbnail_url}
+                  alt={`${video.title}のサムネイル`}
+                  objectFit="cover"
+                  bg="gray.200"
+                  _dark={{ bg: "gray.600" }}
+                />
+              </AspectRatio>
               
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                {video.uploader_name}
-              </p>
-              
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
-                <span>{video.view_count_formatted} views</span>
-                <span>•</span>
-                <span>{video.published_at_formatted}</span>
-              </div>
-              
-              {video.livers.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {video.livers.slice(0, 3).map((liver) => (
-                    <span
-                      key={liver.id}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs"
-                    >
-                      <Image
-                        src={liver.avatar_url}
-                        alt={liver.display_name}
-                        width={16}
-                        height={16}
-                        className="w-4 h-4 rounded-full"
-                      />
-                      {liver.display_name}
-                    </span>
-                  ))}
-                  {video.livers.length > 3 && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
-                      +{video.livers.length - 3}
-                    </span>
-                  )}
-                </div>
+              {/* 時間バッジは AspectRatio の外側に配置 */}
+              {video.duration_formatted && (
+                <Badge
+                  position="absolute"
+                  bottom="2"
+                  right="2"
+                  bg="blackAlpha.800"
+                  color="white"
+                  fontSize="xs"
+                  borderRadius="md"
+                  px="2"
+                  py="1"
+                >
+                  {video.duration_formatted}
+                </Badge>
               )}
-            </div>
-          </div>
+            </Box>
+            
+            {/* 動画情報部分 */}
+            <Box p={4}>
+              <VStack align="start" spacing={3}>
+                <Text
+                  fontSize="lg"
+                  fontWeight="bold"
+                  color={textColor}
+                  noOfLines={2}
+                  lineHeight="1.3"
+                  title={video.title}
+                >
+                  {video.title}
+                </Text>
+                
+                <VStack align="start" spacing={1} w="100%">
+                  {video.uploader_name && (
+                    <Text fontSize="sm" color={metaColor} fontWeight="medium">
+                      {video.uploader_name}
+                    </Text>
+                  )}
+                  
+                  <HStack spacing={2} fontSize="xs" color={metaColor}>
+                    {video.view_count && (
+                      <Text>{video.view_count.toLocaleString()} 回視聴</Text>
+                    )}
+                    {video.published_at && (
+                      <Text>
+                        {video.published_at_formatted}
+                      </Text>
+                    )}
+                  </HStack>
+                </VStack>
+              </VStack>
+            </Box>
+          </Box>
         </Link>
       ))}
-    </div>
+    </Grid>
   );
-}
+};
+
+export default VideoGrid;

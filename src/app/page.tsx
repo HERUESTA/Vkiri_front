@@ -1,6 +1,8 @@
-'use client';
 import { Video } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
+import AnimatedBackground from '@/components/AnimatedBackground';
+import VideoSlideshow from '@/components/VideoSlideshow';
+import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
 async function getVideos(): Promise<Video[]> {
   try {
@@ -31,33 +33,119 @@ export default async function Home() {
   const videos = await getVideos();
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            VTube
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            VTuber動画を見つけて楽しもう
-          </p>
-        </header>
+    <>
+      <AnimatedBackground />
+      <Box 
+        minH="100vh" 
+        position="relative"
+      >
+        <Container maxW="7xl" px={4} py={8}>
+          <Box as="header" mb={8} textAlign="center">
+            <VStack spacing={4}>
+              <Heading 
+                as="h1" 
+                size="3xl" 
+                bgGradient="linear(to-r, purple.400, pink.400, blue.400)" 
+                bgClip="text"
+                fontWeight="extrabold"
+                mb={2}
+                textShadow="2px 2px 4px rgba(0,0,0,0.1)"
+              >
+                ✨ VTube ✨
+              </Heading>
+              <Text 
+                fontSize="xl" 
+                color="purple.600" 
+                _dark={{ color: "purple.300" }}
+                fontWeight="medium"
+              >
+                🌟 VTuber動画を見つけて楽しもう！ 🌟
+              </Text>
+              <Box
+                w="100px"
+                h="4px"
+                bgGradient="linear(to-r, purple.400, pink.400, blue.400)"
+                borderRadius="full"
+                mx="auto"
+              />
+            </VStack>
+          </Box>
+        </Container>
+
+        {/* スライドショーセクション - 画面横いっぱい */}
+        {videos.length > 0 && (
+          <VideoSlideshow videos={videos.slice(0, 4)} />
+        )}
+
+        <Container maxW="7xl" px={4} py={8}>
         
-        <main>
+        <Box as="main">
           {videos.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🎬</div>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                動画が見つかりません
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                APIが設定されていないか、動画がまだ登録されていません。
-              </p>
-            </div>
+            <Center py={12}>
+              <VStack spacing={6}>
+                <Box
+                  bg="white"
+                  _dark={{ bg: "gray.800" }}
+                  p={8}
+                  borderRadius="3xl"
+                  shadow="2xl"
+                  border="3px solid"
+                  borderColor="purple.200"
+                >
+                  <VStack spacing={4}>
+                    <Text fontSize="8xl" mb={4}>🎬✨</Text>
+                    <Heading 
+                      as="h2" 
+                      size="xl" 
+                      color="purple.600" 
+                      _dark={{ color: "purple.300" }} 
+                      mb={2}
+                      textAlign="center"
+                    >
+                      まだ動画がないよ〜！
+                    </Heading>
+                    <Text 
+                      color="purple.500" 
+                      _dark={{ color: "purple.400" }}
+                      textAlign="center"
+                      fontSize="lg"
+                    >
+                      素敵なVTuber動画をお待ちください💫
+                    </Text>
+                  </VStack>
+                </Box>
+              </VStack>
+            </Center>
           ) : (
-            <VideoGrid videos={videos} />
+            <VStack spacing={8} align="stretch">
+              {/* All Videos セクションヘッダー */}
+              <Box textAlign="center">
+                <Heading 
+                  as="h2" 
+                  size="2xl" 
+                  bgGradient="linear(to-r, purple.500, pink.500)" 
+                  bgClip="text"
+                  fontWeight="extrabold"
+                  mb={2}
+                >
+                  🎥 All Videos
+                </Heading>
+                <Text 
+                  fontSize="lg" 
+                  color="purple.600" 
+                  _dark={{ color: "purple.400" }}
+                  fontWeight="medium"
+                >
+                  すべてのVTuber動画をチェック！
+                </Text>
+              </Box>
+              
+              <VideoGrid videos={videos} />
+            </VStack>
           )}
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
+    </>
   );
 }

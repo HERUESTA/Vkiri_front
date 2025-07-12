@@ -1,6 +1,18 @@
 import { Video } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { 
+  SimpleGrid, 
+  Box, 
+  VStack, 
+  Heading, 
+  Text, 
+  HStack, 
+  Tag, 
+  AspectRatio,
+  LinkBox,
+  LinkOverlay
+} from '@chakra-ui/react';
 
 interface VideoGridProps {
   videos: Video[];
@@ -8,69 +20,122 @@ interface VideoGridProps {
 
 export default function VideoGrid({ videos }: VideoGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
       {videos.map((video) => (
-        <Link
-          key={video.id}
-          href={`/video/${video.id}`}
-          className="block group"
-        >
-          <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative aspect-video bg-gray-200 dark:bg-gray-600">
-              <Image
-                src={video.thumbnail_url}
-                alt={video.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-200"
-              />
-              <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
-                {video.duration_formatted}
-              </div>
-            </div>
+        <LinkBox key={video.id} role="group">
+          <Box
+            bg="white"
+            _dark={{ bg: "gray.800" }}
+            borderRadius="lg"
+            overflow="hidden"
+            shadow="sm"
+            _hover={{ shadow: "md" }}
+            transition="box-shadow 0.2s"
+          >
+            <AspectRatio ratio={16/9}>
+              <Box position="relative" bg="gray.200" _dark={{ bg: "gray.600" }}>
+                <Image
+                  src={video.thumbnail_url}
+                  alt={video.title}
+                  fill
+                  style={{ 
+                    objectFit: 'cover',
+                    transition: 'transform 0.2s'
+                  }}
+                />
+                <Box
+                  position="absolute"
+                  bottom={2}
+                  right={2}
+                  bg="blackAlpha.800"
+                  color="white"
+                  fontSize="xs"
+                  px={2}
+                  py={1}
+                  borderRadius="md"
+                >
+                  {video.duration_formatted}
+                </Box>
+              </Box>
+            </AspectRatio>
             
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {video.title}
-              </h3>
+            <VStack align="stretch" p={4} spacing={2}>
+              <LinkOverlay as={Link} href={`/video/${video.id}`}>
+                <Heading
+                  as="h3"
+                  size="sm"
+                  color="gray.900"
+                  _dark={{ color: "white" }}
+                  noOfLines={2}
+                  _groupHover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                  transition="color 0.2s"
+                >
+                  {video.title}
+                </Heading>
+              </LinkOverlay>
               
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <Text
+                fontSize="sm"
+                color="gray.600"
+                _dark={{ color: "gray.400" }}
+              >
                 {video.uploader_name}
-              </p>
+              </Text>
               
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
-                <span>{video.view_count_formatted} views</span>
-                <span>•</span>
-                <span>{video.published_at_formatted}</span>
-              </div>
+              <HStack
+                fontSize="xs"
+                color="gray.500"
+                _dark={{ color: "gray.400" }}
+                spacing={2}
+                mb={3}
+              >
+                <Text>{video.view_count_formatted} views</Text>
+                <Text>•</Text>
+                <Text>{video.published_at_formatted}</Text>
+              </HStack>
               
               {video.livers.length > 0 && (
-                <div className="flex flex-wrap gap-1">
+                <HStack wrap="wrap" spacing={1}>
                   {video.livers.slice(0, 3).map((liver) => (
-                    <span
+                    <Tag
                       key={liver.id}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs"
+                      size="sm"
+                      colorScheme="blue"
+                      borderRadius="full"
                     >
-                      <Image
-                        src={liver.avatar_url}
-                        alt={liver.display_name}
-                        width={16}
-                        height={16}
-                        className="w-4 h-4 rounded-full"
-                      />
+                      <Box mr={1}>
+                        <Image
+                          src={liver.avatar_url}
+                          alt={liver.display_name}
+                          width={16}
+                          height={16}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            borderRadius: '50%' 
+                          }}
+                        />
+                      </Box>
                       {liver.display_name}
-                    </span>
+                    </Tag>
                   ))}
                   {video.livers.length > 3 && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                    <Text
+                      fontSize="xs"
+                      color="gray.500"
+                      _dark={{ color: "gray.400" }}
+                      px={2}
+                      py={1}
+                    >
                       +{video.livers.length - 3}
-                    </span>
+                    </Text>
                   )}
-                </div>
+                </HStack>
               )}
-            </div>
-          </div>
-        </Link>
+            </VStack>
+          </Box>
+        </LinkBox>
       ))}
-    </div>
+    </SimpleGrid>
   );
 }

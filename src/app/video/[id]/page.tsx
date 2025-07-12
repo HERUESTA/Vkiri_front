@@ -4,6 +4,7 @@ import VideoPlayer from '@/components/VideoPlayer';
 import VideoInfo from '@/components/VideoInfo';
 import CommentSection from '@/components/CommentSection';
 import RelatedVideos from '@/components/RelatedVideos';
+import { Box, Container, Grid, GridItem, VStack } from '@chakra-ui/react';
 
 interface VideoPageProps {
   params: Promise<{
@@ -62,28 +63,30 @@ export default async function VideoPage({ params }: VideoPageProps) {
   const relatedVideos = await getRelatedVideos(id);
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <Box minH="100vh" bg="gray.50" _dark={{ bg: "gray.900" }}>
+      <Container maxW="7xl" px={4} py={6}>
+        <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={6}>
           {/* Main content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Video player */}
-            <VideoPlayer video={video} />
-            
-            {/* Video info */}
-            <VideoInfo video={video} />
-            
-            {/* Comments */}
-            <CommentSection videoId={video.id} />
-          </div>
+          <GridItem>
+            <VStack spacing={6} align="stretch">
+              {/* Video player */}
+              <VideoPlayer video={video} />
+              
+              {/* Video info */}
+              <VideoInfo video={video} />
+              
+              {/* Comments */}
+              <CommentSection videoId={video.id} />
+            </VStack>
+          </GridItem>
           
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <GridItem>
             <RelatedVideos videos={relatedVideos} currentVideoId={video.id} />
-          </div>
-        </div>
-      </div>
-    </div>
+          </GridItem>
+        </Grid>
+      </Container>
+    </Box>
   );
 }
 

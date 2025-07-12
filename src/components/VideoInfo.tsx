@@ -1,6 +1,18 @@
 import { Video } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { 
+  Box, 
+  VStack, 
+  HStack, 
+  Heading, 
+  Text, 
+  Avatar, 
+  Tag, 
+  Button, 
+  Icon,
+  Flex
+} from '@chakra-ui/react';
 
 interface VideoInfoProps {
   video: Video;
@@ -8,74 +20,131 @@ interface VideoInfoProps {
 
 export default function VideoInfo({ video }: VideoInfoProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+    <Box
+      bg="white"
+      _dark={{ bg: "gray.800" }}
+      borderRadius="lg"
+      p={6}
+      shadow="sm"
+    >
+      <Heading
+        as="h1"
+        size="xl"
+        color="gray.900"
+        _dark={{ color: "white" }}
+        mb={4}
+      >
         {video.title}
-      </h1>
+      </Heading>
       
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              {video.uploader_name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div>
-            <Link
-              href={`/channel/${video.uploader_channel_id}`}
-              className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-            >
-              {video.uploader_name}
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        align={{ sm: "center" }}
+        justify={{ sm: "space-between" }}
+        gap={4}
+        mb={4}
+      >
+        <HStack spacing={3}>
+          <Avatar
+            size="md"
+            name={video.uploader_name}
+            bg="gray.300"
+            _dark={{ bg: "gray.600" }}
+            color="gray.700"
+            _dark={{ color: "gray.300" }}
+          />
+          <Box>
+            <Link href={`/channel/${video.uploader_channel_id}`}>
+              <Text
+                fontWeight="semibold"
+                color="gray.900"
+                _dark={{ color: "white" }}
+                _hover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                transition="color 0.2s"
+              >
+                {video.uploader_name}
+              </Text>
             </Link>
-          </div>
-        </div>
+          </Box>
+        </HStack>
         
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-          <span>{video.view_count_formatted} views</span>
-          <span>{video.published_at_formatted}</span>
-          <span>{video.duration_formatted}</span>
-        </div>
-      </div>
+        <HStack
+          spacing={4}
+          fontSize="sm"
+          color="gray.600"
+          _dark={{ color: "gray.400" }}
+        >
+          <Text>{video.view_count_formatted} views</Text>
+          <Text>{video.published_at_formatted}</Text>
+          <Text>{video.duration_formatted}</Text>
+        </HStack>
+      </Flex>
       
       {video.livers.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        <Box mb={4}>
+          <Heading
+            as="h3"
+            size="sm"
+            color="gray.700"
+            _dark={{ color: "gray.300" }}
+            mb={2}
+          >
             Featured Livers
-          </h3>
-          <div className="flex flex-wrap gap-2">
+          </Heading>
+          <HStack wrap="wrap" spacing={2}>
             {video.livers.map((liver) => (
-              <Link
-                key={liver.id}
-                href={`/liver/${liver.id}`}
-                className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-              >
-                <Image
-                  src={liver.avatar_url}
-                  alt={liver.display_name}
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 rounded-full"
-                />
-                {liver.display_name}
+              <Link key={liver.id} href={`/liver/${liver.id}`}>
+                <Tag
+                  size="md"
+                  colorScheme="blue"
+                  borderRadius="full"
+                  cursor="pointer"
+                  _hover={{ 
+                    bg: "blue.200", 
+                    _dark: { bg: "blue.800" } 
+                  }}
+                  transition="background-color 0.2s"
+                >
+                  <Box mr={2}>
+                    <Image
+                      src={liver.avatar_url}
+                      alt={liver.display_name}
+                      width={20}
+                      height={20}
+                      style={{ 
+                        width: '20px', 
+                        height: '20px', 
+                        borderRadius: '50%' 
+                      }}
+                    />
+                  </Box>
+                  {liver.display_name}
+                </Tag>
               </Link>
             ))}
-          </div>
-        </div>
+          </HStack>
+        </Box>
       )}
       
-      <div className="flex gap-2">
-        <a
+      <HStack spacing={2}>
+        <Button
+          as="a"
           href={video.youtube_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          colorScheme="red"
+          leftIcon={
+            <Icon viewBox="0 0 24 24" boxSize={5}>
+              <path
+                fill="currentColor"
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+              />
+            </Icon>
+          }
         >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
           Watch on YouTube
-        </a>
-      </div>
-    </div>
+        </Button>
+      </HStack>
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
-'use client';
 import { Video } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
+import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
 async function getVideos(): Promise<Video[]> {
   try {
@@ -31,33 +31,35 @@ export default async function Home() {
   const videos = await getVideos();
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+    <Box minH="100vh" bg="gray.50" _dark={{ bg: "gray.900" }}>
+      <Container maxW="7xl" px={4} py={8}>
+        <Box as="header" mb={8}>
+          <Heading as="h1" size="2xl" color="gray.900" _dark={{ color: "white" }} mb={2}>
             VTube
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          </Heading>
+          <Text color="gray.600" _dark={{ color: "gray.400" }}>
             VTuber動画を見つけて楽しもう
-          </p>
-        </header>
+          </Text>
+        </Box>
         
-        <main>
+        <Box as="main">
           {videos.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🎬</div>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                動画が見つかりません
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                APIが設定されていないか、動画がまだ登録されていません。
-              </p>
-            </div>
+            <Center py={12}>
+              <VStack spacing={4}>
+                <Text fontSize="6xl" mb={4}>🎬</Text>
+                <Heading as="h2" size="xl" color="gray.900" _dark={{ color: "white" }} mb={2}>
+                  動画が見つかりません
+                </Heading>
+                <Text color="gray.600" _dark={{ color: "gray.400" }}>
+                  APIが設定されていないか、動画がまだ登録されていません。
+                </Text>
+              </VStack>
+            </Center>
           ) : (
             <VideoGrid videos={videos} />
           )}
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
   );
 }

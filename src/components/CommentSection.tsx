@@ -1,6 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  Box,
+  VStack,
+  HStack,
+  Heading,
+  Text,
+  Textarea,
+  Button,
+  Avatar,
+  Icon,
+  FormControl,
+  Center
+} from '@chakra-ui/react';
 
 interface Comment {
   id: number;
@@ -54,91 +67,167 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+    <Box
+      bg="white"
+      _dark={{ bg: "gray.800" }}
+      borderRadius="lg"
+      p={6}
+      shadow="sm"
+    >
+      <Heading
+        as="h2"
+        size="lg"
+        color="gray.900"
+        _dark={{ color: "white" }}
+        mb={6}
+      >
         Comments ({comments.length})
-      </h2>
+      </Heading>
       
       {/* Comment form */}
-      <form onSubmit={handleSubmitComment} className="mb-6">
-        <div className="flex gap-3">
-          <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              U
-            </span>
-          </div>
-          <div className="flex-1">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              rows={3}
-              disabled={isLoading}
-            />
-            <div className="flex justify-end gap-2 mt-2">
-              <button
-                type="button"
+      <Box as="form" onSubmit={handleSubmitComment} mb={6}>
+        <HStack align="start" spacing={3}>
+          <Avatar
+            size="md"
+            name="User"
+            bg="gray.300"
+            _dark={{ bg: "gray.600" }}
+            color="gray.700"
+            _dark={{ color: "gray.300" }}
+            flexShrink={0}
+          />
+          <VStack flex={1} align="stretch" spacing={2}>
+            <FormControl>
+              <Textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                resize="none"
+                rows={3}
+                isDisabled={isLoading}
+                focusBorderColor="blue.500"
+                bg="white"
+                _dark={{ bg: "gray.700", color: "white" }}
+                borderColor="gray.300"
+                _dark={{ borderColor: "gray.600" }}
+              />
+            </FormControl>
+            <HStack justify="end" spacing={2}>
+              <Button
+                variant="ghost"
                 onClick={() => setNewComment('')}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-                disabled={isLoading}
+                isDisabled={isLoading}
+                color="gray.600"
+                _dark={{ color: "gray.400" }}
+                _hover={{ color: "gray.800", _dark: { color: "gray.200" } }}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                disabled={!newComment.trim() || isLoading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                colorScheme="blue"
+                isDisabled={!newComment.trim() || isLoading}
+                isLoading={isLoading}
+                loadingText="Posting..."
               >
-                {isLoading ? 'Posting...' : 'Comment'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
+                Comment
+              </Button>
+            </HStack>
+          </VStack>
+        </HStack>
+      </Box>
       
       {/* Comments list */}
-      <div className="space-y-4">
+      <VStack align="stretch" spacing={4}>
         {comments.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-            No comments yet. Be the first to comment!
-          </p>
+          <Center py={8}>
+            <Text
+              color="gray.500"
+              _dark={{ color: "gray.400" }}
+            >
+              No comments yet. Be the first to comment!
+            </Text>
+          </Center>
         ) : (
           comments.map((comment) => (
-            <div key={comment.id} className="flex gap-3">
-              <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                  {comment.author.charAt(0).toUpperCase()}
-                </span>
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-semibold text-gray-900 dark:text-white">
+            <HStack key={comment.id} align="start" spacing={3}>
+              <Avatar
+                size="md"
+                name={comment.author}
+                bg="gray.300"
+                _dark={{ bg: "gray.600" }}
+                color="gray.700"
+                _dark={{ color: "gray.300" }}
+                flexShrink={0}
+              />
+              <VStack align="stretch" flex={1} spacing={1}>
+                <HStack spacing={2} mb={1}>
+                  <Text
+                    fontWeight="semibold"
+                    color="gray.900"
+                    _dark={{ color: "white" }}
+                  >
                     {comment.author}
-                  </span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    _dark={{ color: "gray.400" }}
+                  >
                     {comment.timestamp}
-                  </span>
-                </div>
-                <p className="text-gray-800 dark:text-gray-200 mb-2">
+                  </Text>
+                </HStack>
+                <Text
+                  color="gray.800"
+                  _dark={{ color: "gray.200" }}
+                  mb={2}
+                >
                   {comment.content}
-                </p>
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                  <button className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                    </svg>
+                </Text>
+                <HStack
+                  spacing={4}
+                  fontSize="sm"
+                  color="gray.600"
+                  _dark={{ color: "gray.400" }}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={
+                      <Icon viewBox="0 0 24 24" boxSize={4}>
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                        />
+                      </Icon>
+                    }
+                    _hover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                    p={0}
+                    h="auto"
+                    minW="auto"
+                  >
                     {comment.likes}
-                  </button>
-                  <button className="hover:text-blue-600 dark:hover:text-blue-400">
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    _hover={{ color: "blue.600", _dark: { color: "blue.400" } }}
+                    p={0}
+                    h="auto"
+                    minW="auto"
+                  >
                     Reply
-                  </button>
-                </div>
-              </div>
-            </div>
+                  </Button>
+                </HStack>
+              </VStack>
+            </HStack>
           ))
         )}
-      </div>
-    </div>
+      </VStack>
+    </Box>
   );
 }

@@ -93,7 +93,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
             bg="gray.300"
             _dark={{ bg: "gray.600" }}
             color="gray.700"
-            _dark={{ color: "gray.300" }}
             flexShrink={0}
           />
           <VStack flex={1} align="stretch" spacing={2}>
@@ -109,7 +108,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 bg="white"
                 _dark={{ bg: "gray.700", color: "white" }}
                 borderColor="gray.300"
-                _dark={{ borderColor: "gray.600" }}
               />
             </FormControl>
             <HStack justify="end" spacing={2}>
@@ -157,7 +155,6 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 bg="gray.300"
                 _dark={{ bg: "gray.600" }}
                 color="gray.700"
-                _dark={{ color: "gray.300" }}
                 flexShrink={0}
               />
               <VStack align="stretch" flex={1} spacing={1}>

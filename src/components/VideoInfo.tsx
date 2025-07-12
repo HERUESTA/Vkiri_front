@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   Box, 
-  VStack, 
   HStack, 
   Heading, 
   Text, 
@@ -51,7 +50,6 @@ export default function VideoInfo({ video }: VideoInfoProps) {
             bg="gray.300"
             _dark={{ bg: "gray.600" }}
             color="gray.700"
-            _dark={{ color: "gray.300" }}
           />
           <Box>
             <Link href={`/channel/${video.uploader_channel_id}`}>

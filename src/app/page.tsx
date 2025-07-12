@@ -9,6 +9,9 @@ import VideoSlideshow from '@/components/VideoSlideshow';
 import Pagination from '@/components/Pagination';
 import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react';
 
+// 動的レンダリングを強制（useSearchParamsを使用するため）
+export const dynamic = 'force-dynamic';
+
 async function getVideos(page: number = 1, perPage: number = 20): Promise<VideosResponse> {
   try {
     // 環境に応じてAPIのURLを決定
@@ -251,6 +254,23 @@ function HomeContent() {
 }
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+        <VStack spacing={4}>
+          <Text fontSize="4xl">🎬</Text>
+          <Text fontSize="lg" color="purple.600">動画を読み込んでいます...</Text>
+        </VStack>
+      </Box>
+    );
+  }
+
   return (
     <Suspense fallback={
       <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">

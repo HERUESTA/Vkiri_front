@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,17 +17,15 @@ export const metadata: Metadata = {
   description: "VTuber動画を見つけて楽しもう",
 };
 
-export default function RootLayout({
+export default function RootLayout({ 
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+ }: { 
+  children: React.ReactNode,
+ }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="ja">
+      <body>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

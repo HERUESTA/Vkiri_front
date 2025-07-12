@@ -1,3 +1,4 @@
+'use client';
 import { Video } from '@/lib/types';
 import VideoGrid from '@/components/VideoGrid';
 

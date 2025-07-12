@@ -102,12 +102,12 @@ export default function VideoSlideshow({ videos }: VideoSlideshowProps) {
         },
         "@keyframes sparkle": {
           "0%, 100%": { opacity: 0.3, transform: "scale(1) rotate(0deg)" },
-          "50%": { opacity: 1, transform: "scale(1.2) rotate(180deg)" },
+          "50%": { opacity: 1, transform: "scale(1.2) rotate(1620deg)" },
         },
         "@keyframes float": {
           "0%, 100%": { transform: "translateY(0px) rotate(0deg)" },
-          "33%": { transform: "translateY(-15px) rotate(120deg)" },
-          "66%": { transform: "translateY(8px) rotate(240deg)" },
+          "33%": { transform: "translateY(-15px) rotate(1080deg)" },
+          "66%": { transform: "translateY(8px) rotate(2160deg)" },
         },
         "@keyframes heartBeat": {
           "0%, 100%": { transform: "scale(1)" },
@@ -130,7 +130,7 @@ export default function VideoSlideshow({ videos }: VideoSlideshowProps) {
           zIndex={0}
           opacity={0.6}
           sx={{
-            animation: `float ${4 + Math.random() * 4}s ease-in-out infinite`,
+            animation: `float ${0.7 + Math.random() * 0.7}s ease-in-out infinite`,
             animationDelay: `${Math.random() * 3}s`,
           }}
           pointerEvents="none"
@@ -236,7 +236,7 @@ export default function VideoSlideshow({ videos }: VideoSlideshowProps) {
                           top={`${20 + Math.random() * 60}%`}
                           left={`${20 + Math.random() * 60}%`}
                           sx={{
-                            animation: `sparkle ${2 + Math.random()}s ease-in-out infinite`,
+                            animation: `sparkle ${0.3 + Math.random() * 0.2}s ease-in-out infinite`,
                             animationDelay: `${sparkleIndex * 0.3}s`,
                           }}
                         >

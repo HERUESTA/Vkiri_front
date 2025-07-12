@@ -20,7 +20,7 @@ interface RelatedVideosProps {
 }
 
 export default function RelatedVideos({ videos, currentVideoId }: RelatedVideosProps) {
-  const filteredVideos = videos.filter(video => video.id !== currentVideoId);
+  const filteredVideos = videos.filter(video => video.id !== currentVideoId).slice(0, 8);
 
   return (
     <Box

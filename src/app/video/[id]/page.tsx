@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Video } from '@/lib/types';
+import { Video, VideoResponse } from '@/lib/types';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoInfo from '@/components/VideoInfo';
 import RelatedVideos from '@/components/RelatedVideos';
@@ -13,7 +13,7 @@ interface VideoPageProps {
   }>;
 }
 
-async function getVideo(id: string): Promise<Video | null> {
+async function getVideo(id: string): Promise<{ video: Video; relatedVideos: Video[] } | null> {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
     console.log('API URL:', apiUrl, 'Environment:', process.env.NODE_ENV);
@@ -26,42 +26,27 @@ async function getVideo(id: string): Promise<Video | null> {
       return null;
     }
     
-    const data = await response.json();
-    return data.video;
+    const data: VideoResponse = await response.json();
+    return {
+      video: data.video,
+      relatedVideos: data.related_videos || []
+    };
   } catch (error) {
     console.error('Error fetching video:', error);
     return null;
   }
 }
 
-async function getRelatedVideos(videoId: string): Promise<Video[]> {
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
-    const response = await fetch(`${apiUrl}/api/v1/videos/${videoId}/related`, {
-      cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-      return [];
-    }
-    
-    const data = await response.json();
-    return data.videos || [];
-  } catch (error) {
-    console.error('Error fetching related videos:', error);
-    return [];
-  }
-}
 
 export default async function VideoPage({ params }: VideoPageProps) {
   const { id } = await params;
-  const video = await getVideo(id);
+  const result = await getVideo(id);
   
-  if (!video) {
+  if (!result) {
     notFound();
   }
   
-  const relatedVideos = await getRelatedVideos(id);
+  const { video, relatedVideos } = result;
   
   return (
     <>
@@ -142,13 +127,15 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
 export async function generateMetadata({ params }: VideoPageProps) {
   const { id } = await params;
-  const video = await getVideo(id);
+  const result = await getVideo(id);
   
-  if (!video) {
+  if (!result) {
     return {
       title: 'Video Not Found'
     };
   }
+  
+  const { video } = result;
   
   return {
     title: video.title,

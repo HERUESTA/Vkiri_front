@@ -39,11 +39,6 @@ export default async function Home() {
         minH="100vh" 
         position="relative"
       >
-        {/* スライドショーセクション - 画面横いっぱい */}
-        {videos.length > 0 && (
-          <VideoSlideshow videos={videos.slice(0, 6)} />
-        )}
-
         <Container maxW="7xl" px={4} py={8}>
           <Box as="header" mb={8} textAlign="center">
             <VStack spacing={4}>
@@ -75,6 +70,14 @@ export default async function Home() {
               />
             </VStack>
           </Box>
+        </Container>
+
+        {/* スライドショーセクション - 画面横いっぱい */}
+        {videos.length > 0 && (
+          <VideoSlideshow videos={videos.slice(0, 4)} />
+        )}
+
+        <Container maxW="7xl" px={4} py={8}>
         
         <Box as="main">
           {videos.length === 0 ? (

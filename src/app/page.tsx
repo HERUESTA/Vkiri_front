@@ -39,42 +39,42 @@ export default async function Home() {
         minH="100vh" 
         position="relative"
       >
-        {/* スライドショーセクション */}
+        {/* スライドショーセクション - 画面横いっぱい */}
         {videos.length > 0 && (
           <VideoSlideshow videos={videos.slice(0, 6)} />
         )}
 
-      <Container maxW="7xl" px={4} py={8}>
-        <Box as="header" mb={8} textAlign="center">
-          <VStack spacing={4}>
-            <Heading 
-              as="h1" 
-              size="3xl" 
-              bgGradient="linear(to-r, purple.400, pink.400, blue.400)" 
-              bgClip="text"
-              fontWeight="extrabold"
-              mb={2}
-              textShadow="2px 2px 4px rgba(0,0,0,0.1)"
-            >
-              ✨ VTube ✨
-            </Heading>
-            <Text 
-              fontSize="xl" 
-              color="purple.600" 
-              _dark={{ color: "purple.300" }}
-              fontWeight="medium"
-            >
-              🌟 VTuber動画を見つけて楽しもう！ 🌟
-            </Text>
-            <Box
-              w="100px"
-              h="4px"
-              bgGradient="linear(to-r, purple.400, pink.400, blue.400)"
-              borderRadius="full"
-              mx="auto"
-            />
-          </VStack>
-        </Box>
+        <Container maxW="7xl" px={4} py={8}>
+          <Box as="header" mb={8} textAlign="center">
+            <VStack spacing={4}>
+              <Heading 
+                as="h1" 
+                size="3xl" 
+                bgGradient="linear(to-r, purple.400, pink.400, blue.400)" 
+                bgClip="text"
+                fontWeight="extrabold"
+                mb={2}
+                textShadow="2px 2px 4px rgba(0,0,0,0.1)"
+              >
+                ✨ VTube ✨
+              </Heading>
+              <Text 
+                fontSize="xl" 
+                color="purple.600" 
+                _dark={{ color: "purple.300" }}
+                fontWeight="medium"
+              >
+                🌟 VTuber動画を見つけて楽しもう！ 🌟
+              </Text>
+              <Box
+                w="100px"
+                h="4px"
+                bgGradient="linear(to-r, purple.400, pink.400, blue.400)"
+                borderRadius="full"
+                mx="auto"
+              />
+            </VStack>
+          </Box>
         
         <Box as="main">
           {videos.length === 0 ? (

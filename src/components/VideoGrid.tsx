@@ -37,6 +37,7 @@ export default function VideoGrid({ videos }: VideoGridProps) {
             transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             border="2px solid"
             borderColor="purple.100"
+            _dark={{ borderColor: "purple.700" }}
             position="relative"
             _before={{
               content: '""',

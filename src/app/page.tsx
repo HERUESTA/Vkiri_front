@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Video, VideosResponse } from '@/lib/types';
+import { getApiUrl } from '@/lib/config';
 import VideoGrid from '@/components/VideoGrid';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import VideoSlideshow from '@/components/VideoSlideshow';
@@ -11,8 +12,8 @@ import { Box, Container, Heading, Text, VStack, Center } from '@chakra-ui/react'
 
 async function getVideos(page: number = 1, perPage: number = 20): Promise<VideosResponse> {
   try {
-    // 本番バックエンドを使用
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
+    // 設定から API URL を取得
+    const apiUrl = getApiUrl();
     
     // バックエンドAPIからビデオデータを取得（ページネーション対応）
     console.log('Fetching from URL:', `${apiUrl}/api/v1/videos?page=${page}&per_page=${perPage}`);

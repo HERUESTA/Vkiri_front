@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Video, VideoResponse } from '@/lib/types';
+import { getApiUrl } from '@/lib/config';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoInfo from '@/components/VideoInfo';
 import RelatedVideos from '@/components/RelatedVideos';
@@ -15,7 +16,7 @@ interface VideoPageProps {
 
 async function getVideo(id: string): Promise<{ video: Video; relatedVideos: Video[] } | null> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vkiri-back.fly.dev';
+    const apiUrl = getApiUrl();
     console.log('API URL:', apiUrl, 'Environment:', process.env.NODE_ENV);
     
     const response = await fetch(`${apiUrl}/api/v1/videos/${id}`, {
